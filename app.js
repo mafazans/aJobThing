@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import expressValidator from 'express-validator';
 import routes from './routes/index';
 import apiRoutes from './routes/api';
+import userRoutes from './routes/user';
 import errorHandlers from './handlers/errorHandlers';
 
 const app = express();
@@ -23,7 +24,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
 
 app.use('/', routes);
-// app.use('/api', apiRoutes);
+app.use('/api', apiRoutes);
+app.use('/api/auth', userRoutes);
 
 //error handling middleware, if the async method get the error the errorHandlers helper will catch it and pass it to notFound -> mongoError -> authError
 app.use(errorHandlers.notFound);
