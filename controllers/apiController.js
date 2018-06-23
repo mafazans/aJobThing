@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
 import multer from 'multer';
-import uuid from 'uuid';
 const Job = mongoose.model('Job');
 const Companyprofile = mongoose.model('Companyprofile');
 const Freelancerprofile = mongoose.model('Freelancerprofile');
 const Appliedjob = mongoose.model('Appliedjob');
 
-exports.upload = multer({ dest: 'public/uploads' }).single('cv');
+exports.upload = multer({ dest: './public/uploads/' }).single('cv');
 
 exports.createCompanyProfile = async (req, res) => {
 	if(req.userData.account !== 'employer'){
@@ -35,7 +34,7 @@ exports.createFreelancerProfile = async (req, res) => {
 	}
 
 	const extension = req.file.mimetype.split('/')[1];
-	req.body.cv = `${req.file.filename}.${extension}`;
+	req.body.cv = req.file.filename;
 
 	req.body.freelancer = req.userData.id;
 	req.body.email = req.userData.email;
