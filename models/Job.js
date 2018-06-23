@@ -19,7 +19,7 @@ const jobSchema = new mongoose.Schema({
 	},
 	poster: {
 		type: mongoose.Schema.ObjectId,
-		ref: 'User',
+		ref: 'Companyprofile',
 		required: 'You must have a job poster!'
 	},
 	status: {

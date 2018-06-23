@@ -19,7 +19,7 @@ const userSchema = new Schema({
 	},
 	name: {
 		type: String,
-		required: false,
+		required: 'You must fill your name',
 		trim: true
 	},
 	account: {

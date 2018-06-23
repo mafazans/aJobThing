@@ -4,6 +4,11 @@ import apiController from '../controllers/apiController';
 const { catchErrors } = require('../handlers/errorHandlers');
 const checkAuth = require('../handlers/check-auth');
 
+router.post('/companyprofile',
+	catchErrors(checkAuth),
+	catchErrors(apiController.createCompanyProfile)
+	);
+
 router.post('/createjob',
 	catchErrors(checkAuth),
 	catchErrors(apiController.createJob)
