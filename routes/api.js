@@ -22,6 +22,11 @@ router.post('/createjob',
 
 router.get('/jobs', catchErrors(apiController.getJobs));
 
+router.get('/applicants',
+	catchErrors(checkAuth),
+	catchErrors(apiController.getApplicants)
+	);
+
 router.post('/applyjob',
 	catchErrors(checkAuth),
 	catchErrors(apiController.applyJob)

@@ -6,16 +6,22 @@ const freelancerprofileSchema = new mongoose.Schema({
 		ref: 'User',
 		required: true
 	},
+	rank: {
+		type: String,
+		default: "B"
+	},
+	points: {
+		type: Number,
+		default: 0
+	},
 	email: String,
-	name: String,
 	nickname: String,
 	location: String,
 	description: String,
 	phone: String,
 	skills: [String],
 	cv: {
-		type: String,
-		required: 'Please upload your CV!'
+		type: String
 	}
 });
 

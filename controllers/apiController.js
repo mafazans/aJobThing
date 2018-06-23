@@ -28,7 +28,6 @@ exports.createCompanyProfile = async (req, res) => {
 }
 
 exports.createFreelancerProfile = async (req, res) => {
-	console.log(req.file);
 	if(req.userData.account !== 'freelancer'){
 		res.json({ status: false, message: 'You must be a freelancer!'})
 	}
@@ -38,8 +37,6 @@ exports.createFreelancerProfile = async (req, res) => {
 
 	req.body.freelancer = req.userData.id;
 	req.body.email = req.userData.email;
-	req.body.name = req.userData.name;
-
 
 	const checkFreelancer = await Freelancerprofile.find({ freelancer: req.userData.id });
 	if(checkFreelancer.length === 0){
@@ -76,14 +73,34 @@ exports.applyJob = async (req, res) => {
 	if(req.userData.account !== 'freelancer'){
 		res.json({ status: false, message: 'You must be a freelancer!'})
 	}
-	const job = await Job.findOne({ _id: req.body.jobId } );
-	const freelancer = await Freelancerprofile.findOne({ freelancer: req.userData.id });
-	const employer = await Companyprofile.find();
 
-	const appliedJob = await (new Appliedjob({
-		job: job._id,
-		applicant: freelancer._id,
-		company: job.poster
-	})).save();
-	res.json({ status: true, message: 'Applied', appliedJob });
+	const freelancer = await Freelancerprofile.findOne({ freelancer: req.userData.id });
+
+	if((freelancer.rank === 'B' && freelancer.points <20) || (freelancer.rank === 'A' && freelancer.points <40)){
+		const checkApplied = await Appliedjob.find({ job: req.body.jobId, applicant: freelancer });
+		if(checkApplied.length === 0){
+			const job = await Job.findOne({ _id: req.body.jobId } );
+			const employer = await Companyprofile.find();
+
+			const appliedJob = await (new Appliedjob({
+				job: job._id,
+				applicant: freelancer._id,
+				company: job.poster
+			})).save();
+
+			await Freelancerprofile.findOneAndUpdate({ freelancer: req.userData.id }, { points: freelancer.points+2}, {
+					new: true,
+					runValidators: true
+				}).exec();
+
+			res.json({ status: true, message: 'Applied', appliedJob });
+		}
+		res.json({ status: false, message: 'Cant apply the same job'})
+	}
+	res.json({status: false, message: 'You exceed your limit points'})
+}
+
+exports.getApplicants = async (req, res) => {
+	const applicants = await Appliedjob.find({ company: req.userData.id}).populate('applicant');
+	res.json(applicants)
 }
