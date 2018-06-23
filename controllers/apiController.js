@@ -6,16 +6,7 @@ const Companyprofile = mongoose.model('Companyprofile');
 const Freelancerprofile = mongoose.model('Freelancerprofile');
 const Appliedjob = mongoose.model('Appliedjob');
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'public/cv')
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now())
-    }
-});
-
-exports.upload = multer({ storage }).single('file');
+exports.upload = multer({ dest: 'public/uploads' }).single('cv');
 
 exports.createCompanyProfile = async (req, res) => {
 	if(req.userData.account !== 'employer'){
@@ -38,12 +29,18 @@ exports.createCompanyProfile = async (req, res) => {
 }
 
 exports.createFreelancerProfile = async (req, res) => {
+	console.log(req.file);
 	if(req.userData.account !== 'freelancer'){
 		res.json({ status: false, message: 'You must be a freelancer!'})
 	}
+
+	const extension = req.file.mimetype.split('/')[1];
+	req.body.cv = `${req.file.filename}.${extension}`;
+
 	req.body.freelancer = req.userData.id;
 	req.body.email = req.userData.email;
 	req.body.name = req.userData.name;
+
 
 	const checkFreelancer = await Freelancerprofile.find({ freelancer: req.userData.id });
 	if(checkFreelancer.length === 0){
