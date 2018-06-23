@@ -6,6 +6,8 @@ const companyprofileSchema = new mongoose.Schema({
 		ref: 'User',
 		required: true
 	},
+	email: String,
+	name: String,
 	companyName: String,
 	location: String,
 	description: String,

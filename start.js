@@ -10,7 +10,7 @@ import './models/User';
 import './models/Companyprofile';
 import './models/Freelancerprofile';
 import './models/Job';
-import './models/Proposal';
+import './models/Appliedjob';
 
 const app = require('./app');
 app.set('port', process.env.PORT || 7777);

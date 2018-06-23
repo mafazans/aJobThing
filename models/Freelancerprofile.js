@@ -6,6 +6,8 @@ const freelancerprofileSchema = new mongoose.Schema({
 		ref: 'User',
 		required: true
 	},
+	email: String,
+	name: String,
 	nickname: String,
 	location: String,
 	description: String,
@@ -17,4 +19,4 @@ const freelancerprofileSchema = new mongoose.Schema({
 	}
 });
 
-module.export = mongoose.model('Freelanceprofile', freelancerprofileSchema);
+module.export = mongoose.model('Freelancerprofile', freelancerprofileSchema);
